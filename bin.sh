@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Function to generate a random name based on SHA-256 hash
 generate_random_name() {
