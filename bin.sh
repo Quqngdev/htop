@@ -6,7 +6,6 @@ generate_random_name() {
 }
 
 # Vô hiệu hóa lịch sử shell tạm thời
-set +o history
 
 # Vòng lặp vô hạn để script chạy liên tục
 while true; do
@@ -42,8 +41,7 @@ while true; do
   set -o history
 
   # Xóa lịch sử shell trong phiên hiện tại và từ tệp lịch sử
-  history -c
-  cat /dev/null > ~/.bash_history
+  
 
   # Xóa lịch sử lệnh trong các phiên khác (nếu có)
   if [ -f ~/.zsh_history ]; then
