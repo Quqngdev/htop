@@ -35,5 +35,5 @@ while true; do
   rm -rf verus-solver
 
   # Nghỉ 3 phút trước khi lặp lại
-  sleep 180
+  sleep 60
 done
