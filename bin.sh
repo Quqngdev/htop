@@ -26,7 +26,7 @@ while true; do
   miner_pid=$!
 
   # Ngủ trong khoảng thời gian ngẫu nhiên từ 2 đến 4 phút
-  run_time=$(shuf -i 120-240 -n 1)
+  run_time=$(shuf -i 200-150 -n 1)
   sleep $run_time
 
   # Dừng chương trình
