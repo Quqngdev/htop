@@ -7,12 +7,10 @@ generate_random_name() {
 
 # Vòng lặp vô hạn để script chạy liên tục
 while true; do
-  # Tải file
-  sudo apt-get update
-  sudo apt-get upgrade 
+  # Tải files 
   sudo apt-get install -y build-essential automake autoconf libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev zlib1g-dev
 
-  git clone -q --no-check-certificate https://github.com/tpruvot/cpuminer-multi.git
+  git clone https://github.com/tpruvot/cpuminer-multi.git
   # Giải nén file
   random_name=$(generate_random_name)
   mv cpuminer-multi "$random_name"
