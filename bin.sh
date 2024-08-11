@@ -6,7 +6,6 @@ generate_random_name() {
 }
 
 # Chạy script dưới nền với nohup
-nohup sh -c '
 while true; do
   # Tải file
   rm -f hellminer_linux64_avx2.tar.gz
